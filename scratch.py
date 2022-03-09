@@ -37,23 +37,21 @@ def start_price_list():
 
 def order_coffee():
     for i in range(len(x)):
+        next_choice = x[i]
+        choices = [key for key in next_choice.keys()]
+        price = [value for value in next_choice.values()]
         while len(order) < len(order) + 1:
-            next_choice = x[i]
-            choices = [key for key in next_choice.keys()]
-            price = [value for value in next_choice.values()]
-
             print(f'\nChoose a {y[i]}...\n')
             for j in range(len(x[i])):
                 print(f'{j+1} - {choices[j]}')
             print(f'{len(x[i]) + 1} - quit\n')
-
             try:
                 s_input = int(input())
                 if s_input == len(next_choice) + 1:
                     message = f'\nYou chose: {s_input} - Quit: Goodbye!'
                     return print(message)
                 else:
-                    if s_input !=0:
+                    if s_input != 0:
                         message = f'{s_input} - {choices[s_input - 1]}'
                         user_choice = {
                             f'{choices[s_input - 1]}': price[s_input - 1]}
