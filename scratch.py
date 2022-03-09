@@ -26,7 +26,7 @@ tip = float(.15)
 order = {}
 message = ''
 
-# Price List
+
 def start_price_list():
     print('Price List:')
     for i in range(len(x)):
@@ -35,22 +35,18 @@ def start_price_list():
     return get_size()
 
 
-# Choose Coffee
 def get_size():
     while len(order) < len(order) + 1:
 
-        # Get the coffee size
         next_choice = x[0]
         choices = [key for key in next_choice.keys()]
         price = [value for value in next_choice.values()]
 
-        # Input Question
         print(f'\nChoose a {y[0]}...\n')
         for i in range(len(x[0])):
             print(f'{i+1} - {choices[i]}')
         print(f'{len(x[0]) + 1} - quit\n')
 
-        # Exception Handling
         try:
             s_input = int(input())
             if s_input == len(next_choice) + 1:
@@ -76,19 +72,15 @@ def get_size():
 
 def get_coffee():
     while len(order) < len(order) + 1:
-
-        # Get the coffee type
         next_choice = x[1]
         choices = [key for key in next_choice.keys()]
         price = [value for value in next_choice.values()]
 
-        # Input Question
         print(f'\nChoose a {y[1]}...\n')
         for j in range(len(x[1])):
             print(f'{j+1} - {choices[j]}')
         print(f'{len(x[1]) + 1} - quit\n')
 
-        # Exception Handling
         try:
             s_input = int(input())
             if s_input == len(next_choice) + 1:
@@ -118,13 +110,11 @@ def get_flavor():
         choices = [key for key in next_choice.keys()]
         price = [value for value in next_choice.values()]
 
-        # Input Question
         print(f'\nChoose a {y[2]}...\n')
         for k in range(len(x[2])):
             print(f'{k+1} - {choices[k]}')
         print(f'{len(x[2]) + 1} - quit\n')
 
-        # Exception Handling
         try:
             s_input = int(input())
             if s_input == len(next_choice) + 1:
