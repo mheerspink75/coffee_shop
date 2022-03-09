@@ -1,5 +1,4 @@
 # Coffee Shop
-
 coffee_sizes = {
     'small': 2,
     'medium': 3,
@@ -32,12 +31,14 @@ def start_price_list():
     print('Price List:')
     for i in range(len(x)):
         print(f'{y[i]}: {x[i]}')
-    return choose_size()
+
+    return get_size()
 
 
 # Choose Coffee
-def choose_size():
-    while len(order) < 1:
+def get_size():
+    while len(order) < len(order) + 1:
+
         # Get the coffee size
         next_choice = x[0]
         choices = [key for key in next_choice.keys()]
@@ -74,7 +75,7 @@ def choose_size():
 
 
 def get_coffee():
-    while len(order) < 2:
+    while len(order) < len(order) + 1:
 
         # Get the coffee type
         next_choice = x[1]
@@ -112,7 +113,7 @@ def get_coffee():
 
 
 def get_flavor():
-    while len(order) < 3:
+    while len(order) < len(order) + 1:
         next_choice = x[2]
         choices = [key for key in next_choice.keys()]
         price = [value for value in next_choice.values()]
@@ -151,7 +152,7 @@ def calculate_total():
     print(f'Coffee Order: {order}\n')
     total = round(float(sum(order.values())), 2)
     tip_amount = round(float(total * tip), 2)
-    
+
     return print(f'Coffee: ${total}\nTip: ${tip_amount}\n\nTotal: ${round(total + tip_amount, 2)}')
 
 
