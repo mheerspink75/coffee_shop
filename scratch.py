@@ -40,15 +40,19 @@ def order_coffee():
         next_choice = x[i]
         choices = [key for key in next_choice.keys()]
         price = [value for value in next_choice.values()]
+
         while len(order) < len(order) + 1:
             print(f'\nChoose a {y[i]}...\n')
-            for j in range(len(x[i])):
+
+            for j in range(len(next_choice)):
                 print(f'{j+1} - {choices[j]}')
-            print(f'{len(x[i]) + 1} - quit\n')
+            print(f'{len(next_choice) + 1} - quit\n')
+
             try:
                 s_input = int(input())
                 if s_input == len(next_choice) + 1:
                     message = f'\nYou chose: {s_input} - Quit: Goodbye!'
+
                     return print(message)
                 else:
                     if s_input != 0:
@@ -72,7 +76,7 @@ def order_coffee():
 def calculate_total():
     print(f'\nCoffee Order: {order}\n')
     total = round(float(sum(order.values())), 2)
-    tip_amount = round(float(total * tip), 2)
+    tip_amount = round(total * tip, 2)
 
     return print(f'Coffee: ${total}\nTip: ${tip_amount}\n\nTotal: ${round(total + tip_amount, 2)}')
 
