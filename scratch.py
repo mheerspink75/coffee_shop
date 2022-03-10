@@ -76,7 +76,7 @@ def order_coffee():
 def calculate_total():
     print(f'\nCoffee Order: {order}\n')
     total = float(sum(order.values()))
-    tip_amount = total * tip
+    tip_amount = round(total * tip, 2)
 
     return print(f'Coffee: ${total}\nTip: ${tip_amount}\n\nTotal: ${round(total + tip_amount, 2)}')
 
