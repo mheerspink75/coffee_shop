@@ -7,21 +7,21 @@ coffee_sizes = {
 
 coffees = {
     'brewed': 0,
-    'expresso': float(.5),
+    'expresso': .5,
     'cold_brew': 1
 }
 
 flavoring = {
     'none': 0,
-    'hazelnut': float(.5),
-    'vanilla': float(.5),
-    'caramel': float(.5)
+    'hazelnut': .5,
+    'vanilla': .5,
+    'caramel': .5
 }
 
 x = [coffee_sizes, coffees, flavoring]
 y = ['size', 'coffee', 'flavor']
 
-tip = float(.15)
+tip = .15
 
 order = {}
 message = ''
@@ -61,7 +61,7 @@ def order_coffee():
                             f'{choices[s_input - 1]}': price[s_input - 1]}
                         order.update(user_choice)
                         print(
-                            f'\nYou chose: {message}\n${round(float(price[s_input - 1]), 2)} added to order_total')
+                            f'\nYou chose: {message}\n${price[s_input - 1]} added to order_total')
             except:
                 print('\nPlease enter a valid choice...')
                 continue
@@ -75,8 +75,8 @@ def order_coffee():
 
 def calculate_total():
     print(f'\nCoffee Order: {order}\n')
-    total = round(float(sum(order.values())), 2)
-    tip_amount = round(total * tip, 2)
+    total = float(sum(order.values()))
+    tip_amount = total * tip
 
     return print(f'Coffee: ${total}\nTip: ${tip_amount}\n\nTotal: ${round(total + tip_amount, 2)}')
 
