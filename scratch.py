@@ -29,11 +29,13 @@ orders = []
 totals = []
 
 def start_price_list():
-    print('\n\\\\\\\\\\\\\\\\\ COFFEE SHOP ////////////')
-    print('\n----------PRICE LIST--------------\n')
+    print('\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ COFFEE SHOP ////////////////////')
+    print('\n--------------------PRICE LIST--------------------\n')
     for i in range(len(x)):
         print(f'{y[i]}: {x[i]}')
-    print('\n----------ORDER COFFEE------------\n')
+    print('\n--------------------ORDER COFFEE-------------------\n')
+    print('\n   ||||||||||||| COFFEE SHOP |||||||||||||||||')
+
     return order_coffee()
 
 
@@ -89,13 +91,13 @@ def calculate_total():
     total = round(coffee_total + tip_amount, 2)
     
     order_summary = f'Coffee: ${coffee_total}0\nTip: ${tip_amount}\n\nTotal: ${total}'
-    print(
-        f'\n------------YOU ORDERED {len(orders)} {coffeez}?----------------')
+    print('\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ COFFEE SHOP ////////////////////')
+    print(f'\n------------YOU ORDERED {len(orders)} {coffeez}----------------')
     print(f'\nCoffees Ordered: {len(orders)}\n')
-    # print(f'Orders: {orders}\n')
     print(f'{order_summary}\n')
     print('-------------ORDER ANOTHER COFFEE?---------------')
-
+    print('\n   ||||||||||||| COFFEE SHOP |||||||||||||||||')
+    
     return order_coffee()
 
 
