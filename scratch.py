@@ -22,16 +22,18 @@ x = [coffee_sizes, coffees, flavoring]
 y = ['size', 'coffee', 'flavor']
 
 tip = .15
-
-order = {}
 message = ''
 
+order = {}
+orders = []
+totals = []
 
 def start_price_list():
-    print('Price List:')
+    print('\n\\\\\\\\\\\\\\\\\ COFFEE SHOP ////////////')
+    print('\n----------PRICE LIST--------------\n')
     for i in range(len(x)):
         print(f'{y[i]}: {x[i]}')
-
+    print('\n----------ORDER COFFEE------------\n')
     return order_coffee()
 
 
@@ -41,11 +43,11 @@ def order_coffee():
         choices = [key for key in next_choice.keys()]
         price = [value for value in next_choice.values()]
 
-        while len(order) < len(order) + 1:
+        while True:
             print(f'\nChoose a {y[i]}...\n')
 
             for j in range(len(next_choice)):
-                print(f'{j+1} - {choices[j]}')
+                print(f'{j+1} - {choices[j]} --> ${float(price[j])}0')
             print(f'{len(next_choice) + 1} - quit\n')
 
             try:
@@ -60,8 +62,10 @@ def order_coffee():
                         user_choice = {
                             f'{choices[s_input - 1]}': price[s_input - 1]}
                         order.update(user_choice)
+                        totals.append(price[s_input -1])
                         print(
-                            f'\nYou chose: {message}\n${price[s_input - 1]} added to order_total')
+                            f'\nYou chose: {message}\n${float(price[s_input - 1])}0 added to order_total')
+                        break
             except:
                 print('\nPlease enter a valid choice...')
                 continue
@@ -69,16 +73,30 @@ def order_coffee():
                 print(f'\nEnter a value between 1 and 4')
                 continue
             break
+        
 
     return calculate_total()
 
 
 def calculate_total():
-    print(f'\nCoffee Order: {order}\n')
-    total = float(sum(order.values()))
-    tip_amount = round(total * tip, 2)
+    coffeez = 'COFFEE'
+    if len(orders) != 0:
+        coffeez = 'COFFEES'
 
-    return print(f'Coffee: ${total}\nTip: ${tip_amount}\n\nTotal: ${round(total + tip_amount, 2)}')
+    orders.append([order])    
+    coffee_total = float(sum(totals))
+    tip_amount = round(coffee_total * tip, 2)
+    total = round(coffee_total + tip_amount, 2)
+    
+    order_summary = f'Coffee: ${coffee_total}0\nTip: ${tip_amount}\n\nTotal: ${total}'
+    print(
+        f'\n------------YOU ORDERED {len(orders)} {coffeez}?----------------')
+    print(f'\nCoffees Ordered: {len(orders)}\n')
+    # print(f'Orders: {orders}\n')
+    print(f'{order_summary}\n')
+    print('-------------ORDER ANOTHER COFFEE?---------------')
+
+    return order_coffee()
 
 
 start_price_list()
