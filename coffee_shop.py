@@ -65,7 +65,7 @@ def choose_coffee():
                     return print(message)
                 else:
                     #### update temporary data from user input #####################
-                    if user_input != 0:
+                    if user_input > 0:
                         message = f'{user_input} - {user_choice[user_input - 1]}'
                         sc[0].append(user_choice[user_input - 1])
                         sc[1].append(user_price[user_input - 1])
@@ -73,10 +73,11 @@ def choose_coffee():
                         print(
                             f'\nYou chose: {message.upper()}\n--> ${float(user_price[user_input - 1])}0 added to '
                             f'ORDER TOTAL')
+
             except:
                 print('\nPlease enter a valid choice...')
                 continue
-            if user_input == 0:
+            if user_input <= 0 or user_input > len(price) + 1:
                 print(f'\nEnter a value between 1 and 4')
                 continue
             break
@@ -100,7 +101,7 @@ def store_orders():
     #### store formatted orders in sc[3] ########################
     sc[3].append(s_order)
 
-    #### user input choices from sc[0] and sc[1] ################
+    #### clear user input choices sc[0] and sc[1] ################
     for i in range(len(sc[0])):
         sc[0].pop()
         sc[1].pop()
@@ -133,20 +134,21 @@ def calculate_price():
 
     while True:
         try:
-            #### display options and hand handle exceptions #########
+            #### display options and handle exceptions #########
             print('------------ ORDER ANOTHER COFFEE? --------------')
             user_input = int(input('Order more coffee...\n1 - YES\n2 - NO\n'))
 
             if user_input == 2:
                 print('Quit - Goodbye!')
                 break
-            if user_input == 1:
-                return start_price_list()
+            else:
+                if user_input == 1:
+                    return start_price_list()
         except:
             print('\nPlease enter a valid choice...')
             continue
-        if user_input == 0:
-            print(f'\nEnter a value between 1 and 4')
+        if user_input < 0 or user_input != 2 or user_input != 1:
+            print(f'\nEnter a value between 1 and 2')
             continue
         break
 
