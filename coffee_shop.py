@@ -100,7 +100,7 @@ def store_orders():
     #### store formatted orders in sc[3] ########################
     sc[3].append(s_order)
 
-    #### user input choices from sc[0] and sc[1] ################
+    #### clear user input choices sc[0] and sc[1] ################
     for i in range(len(sc[0])):
         sc[0].pop()
         sc[1].pop()
