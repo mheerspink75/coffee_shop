@@ -133,7 +133,7 @@ def calculate_price():
 
     while True:
         try:
-            #### display options and hand handle exceptions #########
+            #### display options and handle exceptions #########
             print('------------ ORDER ANOTHER COFFEE? --------------')
             user_input = int(input('Order more coffee...\n1 - YES\n2 - NO\n'))
 
