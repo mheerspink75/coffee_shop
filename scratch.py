@@ -101,6 +101,7 @@ def store_orders():
     #### store formatted orders in sc[3] ########################
     sc[3].append(s_order)
 
+
     #### clear user input choices sc[0] and sc[1] ################
     for i in range(len(sc[0])):
         sc[0].pop()
@@ -132,6 +133,10 @@ def calculate_price():
     print(f'TIP: ${float(round(tip_total, 2))}\n')
     print(f'ORDER TOTAL: ${order_total}\n')
 
+    return more_coffee()
+
+
+def more_coffee():
     while True:
         try:
             #### display options and handle exceptions #########
