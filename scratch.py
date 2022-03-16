@@ -119,7 +119,7 @@ def store_orders():
 
 def calculate_price():
     c = 'COFFEE'
-    if len(sc[1]) > 1:
+    if len(sc[2]) > 1:
         c = 'COFFEES'
 
     #### sum price data stored stored in sc[1] ########################
