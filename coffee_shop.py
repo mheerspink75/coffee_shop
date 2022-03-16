@@ -47,13 +47,17 @@ def choose_coffee():
     for choice, price in coffees.items():
         user_choice = [i for i in price.keys()]
         user_price = [i for i in price.values()]
-        print(f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
+        print(
+            f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
         print(f'    Choose a {choice}...\n')
-        for choices, key in enumerate(price):
-            print(f'        {choices + 1} - {key.upper()} --> ${float(price[key])}0')
-        print(f'        {len(price) + 1} - Quit!')
-        print(f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
 
+        for choices, key in enumerate(price):
+            print(
+                f'        {choices + 1} - {key.upper()} --> ${float(price[key])}0')
+
+        print(f'        {len(price) + 1} - Quit!')
+        print(
+            f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
         while True:
             try:
                 #### get user input and handle exceptions ##########################
@@ -63,16 +67,15 @@ def choose_coffee():
                     message = f'\nYou chose: {user_input} - Quit: Goodbye!'
 
                     return print(message)
-                else:
-                    #### update temporary data from user input #####################
-                    if user_input > 0:
-                        message = f'{user_input} - {user_choice[user_input - 1]}'
-                        sc[0].append(user_choice[user_input - 1])
-                        sc[1].append(user_price[user_input - 1])
-                        sc[2].append(user_price[user_input - 1])
-                        print(
-                            f'\nYou chose: {message.upper()}\n--> ${float(user_price[user_input - 1])}0 added to '
-                            f'ORDER TOTAL')
+                #### update temporary data from user input #####################
+                if user_input > 0:
+                    message = f'{user_input} - {user_choice[user_input - 1]}'
+                    sc[0].append(user_choice[user_input - 1])
+                    sc[1].append(user_price[user_input - 1])
+                    sc[2].append(user_price[user_input - 1])
+                    print(
+                        f'\nYou chose: {message.upper()}\n--> ${float(user_price[user_input - 1])}0 added to '
+                        f'ORDER TOTAL')
 
             except:
                 print('\nPlease enter a valid choice...')
@@ -101,11 +104,9 @@ def store_orders():
     #### store formatted orders in sc[3] ########################
     sc[3].append(s_order)
 
-
     #### clear user input choices sc[0] and sc[1] ################
-    for i in range(len(sc[0])):
-        sc[0].pop()
-        sc[1].pop()
+    sc[0].clear()
+    sc[1].clear()
 
     return calculate_price()
 
@@ -142,22 +143,16 @@ def more_coffee():
             #### display options and handle exceptions #########
             print('------------ ORDER ANOTHER COFFEE? --------------')
             user_input = int(input('Order more coffee...\n1 - YES\n2 - NO\n'))
-
             if user_input == 2:
-                print('Quit - Goodbye!')
-                break
-            else:
-                if user_input == 1:
-                    return start_price_list()
+                return print('Quit - Goodbye!')
+            if user_input == 1:
+                return start_price_list()
         except:
             print('\nPlease enter a valid choice...')
             continue
         if user_input < 0 or user_input != 2 or user_input != 1:
             print(f'\nEnter a value between 1 and 2')
             continue
-        break
-
-    return
 
 
 start_price_list()
