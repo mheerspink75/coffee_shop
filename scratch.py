@@ -23,7 +23,7 @@ coffees = {
     }
 }
 
-sc = [[], [], [], []]
+sc = [{}, [], []]
 message = ''
 tip = .15
 
@@ -45,14 +45,17 @@ def start_price_list():
 def choose_coffee():
     ###### loop through coffee and display results #################################
     for choice, price in coffees.items():
-        user_choice = [i for i in price.keys()]
-        user_price = [i for i in price.values()]
-        print(f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
+        print(
+            f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
         print(f'    Choose a {choice}...\n')
+
         for choices, key in enumerate(price):
-            print(f'        {choices + 1} - {key.upper()} --> ${float(price[key])}0')
+            print(
+                f'        {choices + 1} - {key.upper()} --> ${float(price[key])}0')
+
         print(f'        {len(price) + 1} - Quit!')
-        print(f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
+        print(
+            f'\n------------------- CHOOSE {choice.upper()} ------------------\n')
 
         while True:
             try:
@@ -63,16 +66,20 @@ def choose_coffee():
                     message = f'\nYou chose: {user_input} - Quit: Goodbye!'
 
                     return print(message)
-                else:
-                    #### update temporary data from user input #####################
-                    if user_input > 0:
-                        message = f'{user_input} - {user_choice[user_input - 1]}'
-                        sc[0].append(user_choice[user_input - 1])
-                        sc[1].append(user_price[user_input - 1])
-                        sc[2].append(user_price[user_input - 1])
-                        print(
-                            f'\nYou chose: {message.upper()}\n--> ${float(user_price[user_input - 1])}0 added to '
-                            f'ORDER TOTAL')
+
+                #### update temporary data from user input #####################
+                user_choice = [i for i in price.keys()]
+                user_price = [i for i in price.values()]
+
+                if user_input > 0 and user_input < len(price) + 2:
+                    message = f'{user_input} - {user_choice[user_input - 1]}'
+                    sc[0].update({user_choice[user_input - 1]
+                                 : user_price[user_input - 1]})
+                    sc[1].append(user_price[user_input - 1])
+
+                    print(
+                        f'\nYou chose: {message.upper()}\n--> ${float(user_price[user_input - 1])}0 added to '
+                        f'ORDER TOTAL')
 
             except:
                 print('\nPlease enter a valid choice...')
@@ -87,46 +94,46 @@ def choose_coffee():
 
 def store_orders():
     #### format single orders ##################################
+    x = [i for i in sc[0].keys()]
+    y = [i for i in sc[0].values()]
+
     s_order = {
-        'id': f'{len(sc[3])}',
-        'size': f'{sc[0][0]}',
-        'coffee': f'{sc[0][1]}',
-        'flavoring': f'{sc[0][2]}',
-        '_charges': f'{sc[1]}',
-        '_coffee': f'${float(sum(sc[1]))}0',
-        '_tip': f'${round(sum(sc[1]) * tip, 2)}',
-        '_total': f'${round((sum(sc[1]) * tip) + sum(sc[1]), 2)}'
+        'id': f'{len(sc[2])}',
+        'size': f'{x[0]}',
+        'coffee': f'{x[1]}',
+        'flavoring': f'{x[2]}',
+        '_charges': f'{y}',
+        '_coffee': f'${float(sum(y))}0',
+        '_tip': f'${round(sum(y) * tip, 2)}',
+        '_total': f'${round((sum(y) * tip) + sum(y), 2)}'
     }
 
-    #### store formatted orders in sc[3] ########################
-    sc[3].append(s_order)
+    #### store formatted orders in sc[1] ########################
+    sc[2].append(s_order)
 
-
-    #### clear user input choices sc[0] and sc[1] ################
-    for i in range(len(sc[0])):
-        sc[0].pop()
-        sc[1].pop()
+    #### clear user input choices sc[0] #########################
+    sc[0].clear()
 
     return calculate_price()
 
 
 def calculate_price():
     c = 'COFFEE'
-    if len(sc[3]) > 1:
+    if len(sc[1]) > 1:
         c = 'COFFEES'
 
-    #### sum price data stored stored in sc[2] ########################
-    coffee_total = sum(sc[2])
+    #### sum price data stored stored in sc[1] ########################
+    coffee_total = sum(sc[1])
     tip_total = coffee_total * tip
     order_total = round(coffee_total + tip_total, 2)
 
     print('\n|||||||||||| COFFEE SHOP ORDERS |||||||||||||||\n')
-    print(f'\n----------- YOU ORDERED {len(sc[3])} {c} ---------------')
+    print(f'\n----------- YOU ORDERED {len(sc[2])} {c} ---------------')
 
-    #### display formatted orders stored in sc[3] #####################
-    for i in range(len(sc[3])):
+    #### display formatted orders stored in sc[2] #####################
+    for i in range(len(sc[2])):
         print(f'\n      ORDER {i + 1}:\n')
-        for key, value in sc[3][i].items():
+        for key, value in sc[2][i].items():
             print(f'            {key}: {value}')
 
     print(f'\nCOFFEE: ${float(coffee_total)}0')
@@ -142,22 +149,16 @@ def more_coffee():
             #### display options and handle exceptions #########
             print('------------ ORDER ANOTHER COFFEE? --------------')
             user_input = int(input('Order more coffee...\n1 - YES\n2 - NO\n'))
-
             if user_input == 2:
-                print('Quit - Goodbye!')
-                break
-            else:
-                if user_input == 1:
-                    return start_price_list()
+                return print('Quit - Goodbye!')
+            if user_input == 1:
+                return start_price_list()
         except:
             print('\nPlease enter a valid choice...')
             continue
         if user_input < 0 or user_input != 2 or user_input != 1:
             print(f'\nEnter a value between 1 and 2')
             continue
-        break
-
-    return
 
 
 start_price_list()
