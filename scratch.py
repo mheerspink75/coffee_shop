@@ -102,7 +102,6 @@ def store_orders():
         'size': f'{x[0]}',
         'coffee': f'{x[1]}',
         'flavoring': f'{x[2]}',
-        '_charges': f'{y}',
         '_coffee': f'${float(sum(y))}0',
         '_tip': f'${round(sum(y) * tip, 2)}',
         '_total': f'${round((sum(y) * tip) + sum(y), 2)}'

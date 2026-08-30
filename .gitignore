@@ -1,2 +1,4 @@
 .vscode/
 coffee_shop1/
+node_modules/
+dist/

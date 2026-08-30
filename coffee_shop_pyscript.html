@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shop - PyScript</title>
+    <script defer src="https://pyscript.net/releases/2022.12.1/pyscript.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            color: #e0e0e0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        #output {
+            background: #0a0a0a;
+            border: 1px solid #667eea;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 150px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            background: #2a2a2a;
+            border: 1px solid #667eea;
+            border-radius: 5px;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .section-title {
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: #2a2a2a;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+            border-radius: 3px;
+        }
+        
+        .success {
+            color: #4caf50;
+        }
+        
+        .error {
+            color: #ff6b6b;
+        }
+        
+        .info {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☕ COFFEE SHOP</h1>
+            <p>Order your favorite coffee online!</p>
+        </div>
+        
+        <div id="output"></div>
+        
+        <div class="input-group" id="input-container" style="display: none;">
+            <input type="number" id="user-input" placeholder="Enter your choice..." min="1">
+        </div>
+        
+        <div class="button-group" id="button-container"></div>
+    </div>
+
+    <py-script>
+from dataclasses import dataclass
+from typing import Dict, List
+from enum import Enum
+try:
+    from pyodide.ffi import create_proxy
+except ImportError:
+    from pyodide import create_proxy
+
+
+class CoffeeSize(Enum):
+    SMALL = 2.0
+    MEDIUM = 3.0
+    LARGE = 4.0
+
+
+class CoffeeType(Enum):
+    BREWED = 0.0
+    ESPRESSO = 0.5
+    COLD_BREW = 1.0
+
+
+class Flavoring(Enum):
+    NONE = (0.0, 0)
+    HAZELNUT = (0.5, 1)
+    VANILLA = (0.5, 2)
+    CARAMEL = (0.5, 3)
+    
+    @property
+    def price(self):
+        return self.value[0]
+
+
+@dataclass
+class Order:
+    """Represents a single coffee order"""
+    order_id: int
+    size: CoffeeSize
+    coffee_type: CoffeeType
+    flavoring: Flavoring
+    tip_rate: float = 0.15
+    
+    @property
+    def subtotal(self) -> float:
+        return self.size.value + self.coffee_type.value + self.flavoring.price
+    
+    @property
+    def tip_amount(self) -> float:
+        return round(self.subtotal * self.tip_rate, 2)
+    
+    @property
+    def total(self) -> float:
+        return round(self.subtotal + self.tip_amount, 2)
+    
+    def display(self) -> str:
+        """Format order for display"""
+        return f"""
+      ORDER {self.order_id}:
+            size: {self.size.name.lower()}
+            coffee: {self.coffee_type.name.lower()}
+            flavoring: {self.flavoring.name.lower()}
+            _coffee: ${self.subtotal:.2f}
+            _tip: ${self.tip_amount:.2f}
+            _total: ${self.total:.2f}"""
+"""
+
+
+class Menu:
+    """Manages coffee shop menu"""
+    
+    def __init__(self):
+        self.sizes = {
+            1: CoffeeSize.SMALL,
+            2: CoffeeSize.MEDIUM,
+            3: CoffeeSize.LARGE
+        }
+        self.coffees = {
+            1: CoffeeType.BREWED,
+            2: CoffeeType.ESPRESSO,
+            3: CoffeeType.COLD_BREW
+        }
+        self.flavorings = {
+            1: Flavoring.NONE,
+            2: Flavoring.HAZELNUT,
+            3: Flavoring.VANILLA,
+            4: Flavoring.CARAMEL
+        }
+    
+    def get_price_list(self):
+        """Get formatted price list"""
+        output = '\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ COFFEE SHOP ////////////////////\n'
+        output += '\n------------------- PRICE LIST -------------------\n'
+        
+        output += '   SIZES:\n'
+        for idx, size in self.sizes.items():
+            output += f'                {size.name.upper()} - ${size.value:.2f}\n'
+        
+        output += '\n   COFFEE:\n'
+        for idx, coffee in self.coffees.items():
+            output += f'                {coffee.name.upper()} - ${coffee.value:.2f}\n'
+        
+        output += '\n   FLAVORING:\n'
+        for idx, flavoring in self.flavorings.items():
+            output += f'                {flavoring.name.upper()} - ${flavoring.price:.2f}\n'
+        
+        output += '\n------------------- ORDER COFFEE ------------------\n'
+        output += '\n |||||||||||||||| COFFEE SHOP ||||||||||||||||||||\n'
+        return output
+    
+    def get_category_options(self, category: str):
+        """Get options for a category"""
+        if category == 'size':
+            return self.sizes
+        elif category == 'coffee':
+            return self.coffees
+        elif category == 'flavoring':
+            return self.flavorings
+        return {}
+    
+    def format_choices(self, category: str, options: Dict) -> str:
+        """Format category choices for display"""
+        category_name = category.upper()
+        output = f'\n------------------- CHOOSE {category_name} ------------------\n'
+        output += f'    Choose a {category}...\n\n'
+        
+        for idx, option in options.items():
+            if hasattr(option, 'price'):
+                value = option.price
+            else:
+                value = option.value
+            output += f'        {idx} - {option.name.upper()} --> ${value:.2f}\n'
+        
+        quit_option = len(options) + 1
+        output += f'        {quit_option} - Quit!\n'
+        output += f'\n------------------- CHOOSE {category_name} ------------------\n'
+        return output
+
+
+class CoffeeShop:
+    """Main coffee shop application for browser"""
+    
+    def __init__(self, tip_rate: float = 0.15):
+        self.menu = Menu()
+        self.orders: List[Order] = []
+        self.tip_rate = tip_rate
+        self.order_counter = 0
+        
+        # State management
+        self.current_state = "start"
+        self.current_size = None
+        self.current_coffee = None
+        self.current_flavoring = None
+    
+    def start(self):
+        """Start the application"""
+        output = self.menu.get_price_list()
+        self.output_text(output)
+        self.show_choice_buttons("size")
+    
+    def show_choice_buttons(self, category: str):
+        """Display choice buttons for a category"""
+        options = self.menu.get_category_options(category)
+        output = self.menu.format_choices(category, options)
+        self.output_text(output)
+        
+        self.current_state = f"choosing_{category}"
+        self.display_buttons(options, category)
+    
+    def display_buttons(self, options: Dict, category: str):
+        """Create buttons for user choices"""
+        from js import document
+        button_container = document.getElementById("button-container")
+        button_container.innerHTML = ""
+        
+        for idx in sorted(options.keys()):
+            option = options[idx]
+            btn = document.createElement("button")
+            
+            if hasattr(option, 'price'):
+                value = option.price
+            else:
+                value = option.value
+            
+            btn.textContent = f"{idx} - {option.name.upper()} (${value:.2f})"
+            btn.id = f"btn_{category}_{idx}"
+            button_container.appendChild(btn)
+        
+        # Add quit button
+        quit_btn = document.createElement("button")
+        quit_btn.textContent = f"{len(options) + 1} - QUIT"
+        quit_btn.style.background = "#ff6b6b"
+        quit_btn.id = f"btn_{category}_quit"
+        button_container.appendChild(quit_btn)
+        
+        # Now attach event listeners
+        for idx in sorted(options.keys()):
+            btn = document.getElementById(f"btn_{category}_{idx}")
+            btn.addEventListener("click", create_proxy(lambda e, idx=idx, cat=category: self.handle_choice(idx, cat)))
+        
+        quit_btn = document.getElementById(f"btn_{category}_quit")
+        quit_btn.addEventListener("click", create_proxy(lambda e, cat=category: self.handle_quit(cat)))
+    
+    def handle_choice(self, choice: int, category: str):
+        """Handle user choice"""
+        options = self.menu.get_category_options(category)
+        
+        if choice not in options:
+            self.output_text('\n<span class="error">Invalid choice!</span>', append=True)
+            return
+        
+        selected = options[choice]
+        if hasattr(selected, 'price'):
+            value = selected.price
+        else:
+            value = selected.value
+        
+        output = f'\n<span class="success">You chose: {choice} - {selected.name.upper()}\n--> ${value:.2f} added to ORDER TOTAL</span>'
+        self.output_text(output, append=True)
+        
+        # Store choice and move to next step
+        if category == "size":
+            self.current_size = selected
+            self.show_choice_buttons("coffee")
+        elif category == "coffee":
+            self.current_coffee = selected
+            self.show_choice_buttons("flavoring")
+        elif category == "flavoring":
+            self.current_flavoring = selected
+            self.create_order()
+    
+    def handle_quit(self, category: str):
+        """Handle quit choice"""
+        self.output_text('\n<span class="info">You chose: QUIT - Goodbye!</span>', append=True)
+        self.reset_shop()
+    
+    def create_order(self):
+        """Create and store the order"""
+        self.order_counter += 1
+        order = Order(
+            order_id=self.order_counter,
+            size=self.current_size,
+            coffee_type=self.current_coffee,
+            flavoring=self.current_flavoring,
+            tip_rate=self.tip_rate
+        )
+        self.orders.append(order)
+        self.display_summary()
+    
+    def display_summary(self):
+        """Display order summary"""
+        order_word = 'COFFEE' if len(self.orders) == 1 else 'COFFEES'
+        
+        output = f"\n|||||||||||| COFFEE SHOP ORDERS |||||||||||||||\n"
+        output += f"\n----------- YOU ORDERED {len(self.orders)} {order_word} ---------------"
+        
+        for order in self.orders:
+            output += order.display()
+        
+        # Calculate totals
+        total_coffee = sum(order.subtotal for order in self.orders)
+        total_tips = sum(order.tip_amount for order in self.orders)
+        order_total = sum(order.total for order in self.orders)
+        
+        output += f"\n\nCOFFEE: ${total_coffee:.2f}"
+        output += f"\nTIP: ${total_tips:.2f}\n"
+        output += f"ORDER TOTAL: ${order_total:.2f}\n"
+        
+        self.output_text(output, append=True)
+        self.show_order_more_buttons()
+    
+    def show_order_more_buttons(self):
+        """Show buttons to order more or quit"""
+        from js import document
+        button_container = document.getElementById("button-container")
+        button_container.innerHTML = ""
+        
+        output = "\n------------ ORDER ANOTHER COFFEE? --------------"
+        self.output_text(output, append=True)
+        
+        yes_btn = document.createElement("button")
+        yes_btn.textContent = "1 - YES (Order Another)"
+        yes_btn.style.background = "#4caf50"
+        yes_btn.id = "btn_yes"
+        button_container.appendChild(yes_btn)
+        
+        no_btn = document.createElement("button")
+        no_btn.textContent = "2 - NO (Exit)"
+        no_btn.style.background = "#ff6b6b"
+        no_btn.id = "btn_no"
+        button_container.appendChild(no_btn)
+        
+        document.getElementById("btn_yes").addEventListener("click", create_proxy(lambda e: self.order_another()))
+        document.getElementById("btn_no").addEventListener("click", create_proxy(lambda e: self.exit_shop()))
+    
+    def order_another(self):
+        """Reset for another order"""
+        self.current_state = "choosing_size"
+        self.current_size = None
+        self.current_coffee = None
+        self.current_flavoring = None
+        self.show_choice_buttons("size")
+    
+    def exit_shop(self):
+        """Exit the shop"""
+        self.output_text('\n<span class="info">Quit - Goodbye! Thanks for your order!</span>', append=True)
+        self.reset_shop()
+    
+    def reset_shop(self):
+        """Reset shop state"""
+        from js import document
+        button_container = document.getElementById("button-container")
+        button_container.innerHTML = ""
+        
+        restart_btn = document.createElement("button")
+        restart_btn.textContent = "🔄 Start New Order"
+        restart_btn.style.background = "#667eea"
+        restart_btn.id = "btn_restart"
+        button_container.appendChild(restart_btn)
+        
+        document.getElementById("btn_restart").addEventListener("click", create_proxy(lambda e: self.start()))
+    
+    def output_text(self, text: str, append: bool = False):
+        """Output text to the display"""
+        from js import document
+        output_div = document.getElementById("output")
+        
+        if append:
+            output_div.innerHTML += text
+        else:
+            output_div.innerHTML = text
+        
+        # Auto-scroll to bottom
+        output_div.scrollTop = output_div.scrollHeight
+
+
+# Initialize and start the app
+shop = CoffeeShop(tip_rate=0.15)
+shop.start()
+    </py-script>
+</body>
+</html>

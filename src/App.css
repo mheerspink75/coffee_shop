@@ -1,0 +1,86 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #1e1e1e;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2em;
+  color: #667eea;
+  margin-bottom: 5px;
+}
+
+.header p {
+  color: #999;
+  font-size: 0.9em;
+}
+
+#output {
+  background: #0a0a0a;
+  border: 1px solid #667eea;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  min-height: 150px;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 15px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  font-family: 'Courier New', monospace;
+  font-size: 0.95em;
+}
+
+button:hover {
+  background: #764ba2;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.success {
+  color: #4caf50;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+.info {
+  color: #667eea;
+}
