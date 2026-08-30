@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.GITHUB_PAGES ? '/mheerspink75-fantastic-goggles/' : '/',
+  base: process.env.GITHUB_PAGES ? '/coffee_shop/' : '/',
   optimizeDeps: {
     esbuildOptions: { target: 'esnext' },
     exclude: ['@pyscript/core'],
