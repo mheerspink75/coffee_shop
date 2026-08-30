@@ -12,7 +12,7 @@ export default function App() {
       <div id="output"></div>
       <div className="button-group" id="button-container"></div>
 
-      <script type="py" src="/coffee_shop.py" config='{"interpreter": "pyodide"}'></script>
+      <script type="py" src={`${import.meta.env.BASE_URL}coffee_shop.py`} config='{"interpreter": "pyodide"}'></script>
     </div>
   );
 }
