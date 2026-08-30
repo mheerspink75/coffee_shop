@@ -2,6 +2,8 @@
 
 ---
 
+***Live Demo: [GitHub Pages](https://mheerspink75.github.io/coffee_shop/)***
+
 ***Link 1: [Repl.it_1](https://replit.com/@MattHeerspink/CoffeeShop#main.py)***
 
 ***Link 2: [Repl.it_2](https://replit.com/@MattHeerspink/CoffeeShop?v=1#main.py)***
